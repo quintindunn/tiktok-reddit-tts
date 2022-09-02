@@ -1,12 +1,14 @@
+import string
+
 import Reddit.structures
 from Reddit import get_sub_reddit_top_posts, structures
 from safe_speak import safe_speak as speak
 import time
 
 
-SUBREDDIT = 'AmItheAsshole'
+SUBREDDIT = 'askreddit'
 TOP_POSTS_COUNT = 1
-TOP_COMMENTS_COUNT = 0
+TOP_COMMENTS_COUNT = 5
 DELAY = 2  # seconds
 
 
@@ -19,7 +21,9 @@ def read_post(reddit_post: Reddit.structures.Post, read_body=True, only_body=Tru
 
     for i in split_sentences(body):
         for y in i.split("\n"):
-            speak(y)
+            if any(x in y for x in string.ascii_letters):
+                speak(y)
+
 
     for comment in comments:
         speak(comment.get_body())
