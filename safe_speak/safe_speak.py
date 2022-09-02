@@ -7,13 +7,13 @@ def add_overwrite(word, replacement):
     overwrites[word] = replacement
 
 
-def safe_speak(text, print_text=True):
+def safe_speak(text, print_text=False, **kwargs):
     for overwrite in overwrites:
         pattern = re.compile(overwrite, re.IGNORECASE)
         text = pattern.sub(overwrites[overwrite], text)
     if print_text:
         print(text)
-    return speak(safe_for_tts(text))
+    return speak(safe_for_tts(text), **kwargs)
 
 
 def safe_for_tts(text):

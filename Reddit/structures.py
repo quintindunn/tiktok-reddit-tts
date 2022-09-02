@@ -30,7 +30,7 @@ class Post:
         comment_url_json = self.__comment_url + f".json?limit={n}"
         response = requests.get(comment_url_json, headers=headers)
         response.raise_for_status()
-        return [Comment.from_dict(comment) for comment in response.json()[1]["data"]["children"][:n]]
+        return list(filter(None, [Comment.from_dict(comment) for comment in response.json()[1]["data"]["children"][:n]]))
 
     def get_title(self):
         return self.__title
@@ -63,13 +63,13 @@ class Comment:
         self.__created_utc: int = created_utc
 
     @staticmethod
-    def from_dict(data: dict) -> Comment:
+    def from_dict(data: dict) -> [Comment, None]:
         new_dict = data.copy()
         new_dict = new_dict["data"]
         try:
             return Comment(new_dict["author"], new_dict["body"], new_dict["ups"], new_dict["score"], new_dict["created"])
         except KeyError:
-            print(new_dict)
+            return
 
     def get_author(self):
         return self.__author
